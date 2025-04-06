@@ -1,0 +1,183 @@
+@use 'sass:math'
+
+@mixin overlay
+  background: rgb(0, 0, 0)
+  backdrop-filter: blur(10px)
+  box-shadow: 0 0 10px rgb(0, 0, 0)
+
+video
+  max-height: 80vh
+  width: 96%
+  height: 100%
+  object-fit: contain
+
+.videoPlayer
+  flex: 1
+  background: rgb(0, 0, 0)
+  display: flex
+  align-items: stretch
+  flex-direction: column
+  justify-content: center
+  position: relative
+  user-select: none
+  display: flex
+  align-items: center
+  justify-content: center
+  min-height:60vh
+
+.emptyVideo
+  height: 40vh
+  width: 38vh
+  color: #F0F4F8
+  display: flex
+  align-items: center
+  justify-content: center
+  font-size: 18px
+  background: linear-gradient(135deg, rgb(0, 0, 0) 0%, rgb(0, 0, 0) 100%) 
+  
+  p
+    max-width: 500px
+    text-align: center
+    line-height: 1.5
+    padding: 2rem
+    border-radius: 12px
+    background: rgba(240, 244, 248, 0.05)
+    backdrop-filter: blur(10px)
+    border: 1px solid var(--border)
+
+.videoCaption
+  @include overlay
+  position: absolute
+  bottom: 80px
+  text-align: center
+  padding: 10px
+  color: #F0F4F8
+  max-width: 520px
+  font-size: 15px
+  margin-inline: 30px
+  left: 50%
+  translate: -50% 0
+  width: -webkit-fill-available
+  border-radius: 5px
+  transition: opacity .2s
+
+.videoControls
+  background: rgba(16, 42, 67, 0.8)
+  backdrop-filter: blur(10px)
+  border-top: 1px solid var(--border)
+
+.videoTime
+  display: flex
+  justify-content: space-between
+  align-items: center
+  padding: 1rem
+  width:130vb
+  font-size: 15px
+  color: #F0F4F8
+  border-radius:2px solid black
+  
+  button
+    font-size: 24px
+    color: #F0F4F8
+    opacity: 0.8
+    transition: opacity 0.2s
+    
+    &:hover
+      opacity: 1
+
+.videoScrubber
+  height: 5px
+  transform-origin: bottom
+  transition: all 0.2s
+  
+  input
+    height: 5px
+    appearance: none
+    width: 100%
+    background-image: linear-gradient(to right, var(--track-fill) 0%, var(--track-fill) var(--pct), var(--track) var(--pct), var(--track) 100%)
+    cursor: pointer
+    
+    &::-webkit-slider-thumb
+      appearance: none
+      width: 12px
+      height: 12px
+      border-radius: 50%
+      background: #62B0E8
+      cursor: pointer
+      transition: transform 0.2s
+      
+      &:hover
+        transform: scale(1.2)
+
+.timecodeList
+  overflow: auto
+  padding: 10px 20px
+
+  td
+    padding: 10px 5px
+
+  button
+    color: #62B0E8
+
+    &:hover
+      color: #87BFFF
+
+.timecodeMarkers
+  position: absolute
+  inset: 0
+  pointer-events: none
+
+$timecodeW: 10px
+$markerW: 3px
+
+.timecodeMarker
+  position: absolute
+  top: 0
+  width: $timecodeW
+  background: rgba(240, 244, 248, 0.01)
+  translate: -(math.round(math.div($timecodeW - $markerW, 2))) 0
+
+  &:hover
+    .timecodeMarkerLabel
+      opacity: 1
+
+.timecodeMarkerTick
+  height: 5px
+  pointer-events: auto
+  cursor: pointer
+  transform-origin: bottom
+  transition: all .2s
+  background: rgba(240, 244, 248, 0.01)
+  overflow: hidden
+
+  > div
+    width: $markerW
+    height: 100%
+    background: #62B0E8
+    translate: 3px 0
+
+.timecodeMarkerLabel
+  @include overlay
+  opacity: 0
+  display: flex
+  flex-direction: column
+  gap: 5px
+  font-size: 11px
+  transition: opacity .1s
+  pointer-events: none
+  position: absolute
+  top: 0
+  translate: 0 calc(-100% - 15px)
+  z-index: 99
+  padding: 8px
+  border-radius: 5px
+  width: max-content
+  max-width: 200px
+  color: #829AB1
+
+  &.right
+    right: 0
+
+  p
+    color: #F0F4F8
+    font-size: 13px
